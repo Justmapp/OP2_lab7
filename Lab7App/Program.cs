@@ -1,36 +1,17 @@
 using DoublyLinkedListLib;
 
-/// <summary>
-/// Entry point of the Lab7 application.
-/// Demonstrates all operations of the <see cref="DoublyLinkedList{T}"/> class
-/// through an interactive console menu.
-/// </summary>
 internal class Program
 {
-    /// <summary>
-    /// The doubly linked list of integers used throughout the session.
-    /// </summary>
-    private static DoublyLinkedList<int> _list = new();
+    private static DoublyLinkedList _list = new();
 
-    /// <summary>
-    /// Application entry point. Pre-fills the list and launches the menu loop.
-    /// </summary>
     private static void Main()
     {
         Console.OutputEncoding = System.Text.Encoding.UTF8;
-
         PrintHeader();
         PreFillList();
         RunMenuLoop();
     }
 
-    // ─────────────────────────────────────────────────────────────────────────
-    // Menu
-    // ─────────────────────────────────────────────────────────────────────────
-
-    /// <summary>
-    /// Runs the main interactive menu in a loop until the user chooses to exit.
-    /// </summary>
     private static void RunMenuLoop()
     {
         bool running = true;
@@ -70,23 +51,13 @@ internal class Program
         PrintColored("\n  До побачення!\n", ConsoleColor.Cyan);
     }
 
-    // ─────────────────────────────────────────────────────────────────────────
-    // Menu actions
-    // ─────────────────────────────────────────────────────────────────────────
-
-    /// <summary>
-    /// Displays all elements of the current list.
-    /// </summary>
     private static void ShowList()
     {
         PrintSectionTitle("Поточний стан списку");
-        PrintListStats();
+        Console.WriteLine($"  Кількість елементів: {_list.Count}");
         Console.WriteLine($"  Список: {_list}");
     }
 
-    /// <summary>
-    /// Prompts the user for an integer value and adds it to the end of the list.
-    /// </summary>
     private static void AddElement()
     {
         PrintSectionTitle("Додати елемент у кінець списку");
@@ -99,9 +70,6 @@ internal class Program
         Console.WriteLine($"  Список: {_list}");
     }
 
-    /// <summary>
-    /// Prompts the user for a zero-based index and removes the element at that position.
-    /// </summary>
     private static void RemoveByIndex()
     {
         PrintSectionTitle("Видалити елемент за індексом");
@@ -125,9 +93,6 @@ internal class Program
         }
     }
 
-    /// <summary>
-    /// Prompts the user for a zero-based index and displays the element stored at that position.
-    /// </summary>
     private static void ReadByIndex()
     {
         PrintSectionTitle("Зчитати елемент за індексом");
@@ -149,10 +114,6 @@ internal class Program
         }
     }
 
-    /// <summary>
-    /// Demonstrates the <c>foreach</c> statement by iterating through the list
-    /// and printing each element with its position.
-    /// </summary>
     private static void IterateWithForeach()
     {
         PrintSectionTitle("Ітерація списку за допомогою foreach");
@@ -170,10 +131,6 @@ internal class Program
         }
     }
 
-    /// <summary>
-    /// Prompts the user for a value and finds the first occurrence of that value in the list.
-    /// Demonstrates operation 1 from the variant.
-    /// </summary>
     private static void FindFirstOccurrence()
     {
         PrintSectionTitle("Знайти перше входження заданого елементу");
@@ -189,13 +146,9 @@ internal class Program
         if (index == -1)
             PrintWarning($"Елемент {value} не знайдено у списку.");
         else
-            PrintSuccess($"Перше входження {value}: позиція {index + 1} (індекс {index} з 0).");
+            PrintSuccess($"Перше входження {value}: позиція {index + 1} (індекс {index}).");
     }
 
-    /// <summary>
-    /// Calculates and displays the sum of elements at odd positions (1, 3, 5, …).
-    /// Demonstrates operation 2 from the variant.
-    /// </summary>
     private static void ShowSumAtOddPositions()
     {
         PrintSectionTitle("Сума елементів на непарних позиціях (1, 3, 5, …)");
@@ -216,10 +169,6 @@ internal class Program
         PrintSuccess($"Сума елементів на непарних позиціях: {sum}");
     }
 
-    /// <summary>
-    /// Prompts the user for a threshold and creates a new list with elements greater than that threshold.
-    /// Demonstrates operation 3 from the variant.
-    /// </summary>
     private static void CreateFilteredList()
     {
         PrintSectionTitle("Новий список з елементів, більших за задане значення");
@@ -230,7 +179,7 @@ internal class Program
         int? threshold = ReadInt("  Введіть порогове значення: ");
         if (threshold is null) return;
 
-        DoublyLinkedList<int> filtered = _list.GetListGreaterThan(threshold.Value);
+        DoublyLinkedList filtered = _list.GetListGreaterThan(threshold.Value);
 
         if (filtered.IsEmpty)
             PrintWarning($"Жодного елемента, більшого за {threshold}, не знайдено.");
@@ -242,10 +191,6 @@ internal class Program
         }
     }
 
-    /// <summary>
-    /// Removes all elements greater than the average value of the list.
-    /// Demonstrates operation 4 from the variant.
-    /// </summary>
     private static void RemoveAboveAverage()
     {
         PrintSectionTitle("Видалити елементи, більші за середнє значення");
@@ -256,8 +201,6 @@ internal class Program
 
         try
         {
-            double avg = _list.SumAtOddPositions(); // only for display — real avg computed internally
-            // Compute and display the real average before modification
             double realSum = 0;
             foreach (int item in _list) realSum += item;
             double realAvg = realSum / _list.Count;
@@ -275,14 +218,6 @@ internal class Program
         }
     }
 
-    // ─────────────────────────────────────────────────────────────────────────
-    // Helpers – data
-    // ─────────────────────────────────────────────────────────────────────────
-
-    /// <summary>
-    /// Pre-fills the list with a set of demo values so the user can immediately
-    /// try all operations without having to add elements manually.
-    /// </summary>
     private static void PreFillList()
     {
         int[] demoValues = { 12, 7, 25, 3, 18, 7, 42, 9, 15, 7 };
@@ -293,18 +228,6 @@ internal class Program
         PrintColored($"  Список заповнено тестовими значеннями: {_list}\n", ConsoleColor.DarkGray);
     }
 
-    /// <summary>
-    /// Displays element count and whether the list is empty.
-    /// </summary>
-    private static void PrintListStats()
-    {
-        Console.WriteLine($"  Кількість елементів: {_list.Count}");
-    }
-
-    /// <summary>
-    /// Checks whether the list is empty and prints a warning if so.
-    /// </summary>
-    /// <returns><c>true</c> if the list is empty; otherwise <c>false</c>.</returns>
     private static bool CheckEmpty()
     {
         if (!_list.IsEmpty) return false;
@@ -312,12 +235,6 @@ internal class Program
         return true;
     }
 
-    /// <summary>
-    /// Reads an integer from the console, displaying the specified prompt.
-    /// Returns <c>null</c> if the input is not a valid integer.
-    /// </summary>
-    /// <param name="prompt">The prompt text to display before reading input.</param>
-    /// <returns>The parsed integer, or <c>null</c> on invalid input.</returns>
     private static int? ReadInt(string prompt)
     {
         Console.Write(prompt);
@@ -330,11 +247,6 @@ internal class Program
         return null;
     }
 
-    // ─────────────────────────────────────────────────────────────────────────
-    // Helpers – UI
-    // ─────────────────────────────────────────────────────────────────────────
-
-    /// <summary>Prints the application header.</summary>
     private static void PrintHeader()
     {
         Console.Clear();
@@ -345,7 +257,6 @@ internal class Program
         Console.WriteLine();
     }
 
-    /// <summary>Prints the interactive main menu.</summary>
     private static void PrintMenu()
     {
         Console.WriteLine();
@@ -365,40 +276,26 @@ internal class Program
         Console.Write("\n  Ваш вибір: ");
     }
 
-    /// <summary>Prints a section title with decorative formatting.</summary>
-    /// <param name="title">The title text to display.</param>
     private static void PrintSectionTitle(string title)
     {
         PrintColored($"\n  ── {title} ──", ConsoleColor.Cyan);
     }
 
-    /// <summary>Prints a success message in green.</summary>
-    /// <param name="message">The message to display.</param>
     private static void PrintSuccess(string message)
     {
         PrintColored($"  ✓ {message}", ConsoleColor.Green);
     }
 
-    /// <summary>Prints an error message in red.</summary>
-    /// <param name="message">The error message to display.</param>
     private static void PrintError(string message)
     {
         PrintColored($"  ✗ Помилка: {message}", ConsoleColor.Red);
     }
 
-    /// <summary>Prints a warning message in yellow.</summary>
-    /// <param name="message">The warning message to display.</param>
     private static void PrintWarning(string message)
     {
         PrintColored($"  ⚠ {message}", ConsoleColor.Yellow);
     }
 
-    /// <summary>
-    /// Prints the specified text in the specified console color,
-    /// then resets the color to the default.
-    /// </summary>
-    /// <param name="text">The text to print.</param>
-    /// <param name="color">The console foreground color to use.</param>
     private static void PrintColored(string text, ConsoleColor color)
     {
         Console.ForegroundColor = color;
